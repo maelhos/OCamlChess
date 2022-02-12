@@ -15,4 +15,4 @@ let distancesq (a: int) (b: int) =
   (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2);;
   
 let pos_of_cc (c: char) (v: char) : int = pos_of_cord (int_of_char c - 0x61) (int_of_char v - 0x31);;
-
+let cc_of_pos (i: int) : char*char = (char_of_int(0x61 + col_of_pos i),char_of_int(0x31 +line_of_pos i));;

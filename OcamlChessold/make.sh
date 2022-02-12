@@ -1,1 +1,0 @@
-ocamlc -o Test Move.ml Color.ml Piece.ml Board.ml main.ml && ./Test

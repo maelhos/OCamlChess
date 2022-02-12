@@ -1,3 +1,5 @@
+open Chessinternals
+open Piecesinternals
 
 let testb = {
   Board.turnToPlay = White;
@@ -11,9 +13,8 @@ let testb = {
   Board.repr = Array.make 64 Piece.EmptySquare
 };;
 
-(*Board.setFENstring testb "rnbqkbnr/pppppppp/8/8/8/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1";;*)
 (* Board.setFENstring testb "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";; *)
-Board.setFENstring testb "2bqkbn1/2pppp2/np2N3/r3P1p1/p2N2B1/5Q2/PPPPKPP1/RNB2r2 w KQkq - 0 1";;
+Board.setFENstring testb "2bqkbn1/2pppp2/n7/r1p1P1p1/p2N2B1/5Q2/PPPPKPP1/RNB2r2 w - - 0 2";;
 
 print_int (Board.eval testb);;
 print_newline ();;
@@ -34,8 +35,9 @@ let print_int_array (l: int array) : unit =
   | _ -> Printf.printf "%d; " l.(i); aux l (i+1)
   in print_char '['; aux l 0;;
 
-let a = 27;;
+let a = 21;;
 let attackmap = Array.make 64 0;;
-Board.knightAttackMap testb a attackmap ;;
+Queen.queenAttackMap testb a attackmap ;;
 print_int_array attackmap;;
 
+Board.print_move_list testb (Queen.queenLegalMoves testb a);;

@@ -1,0 +1,3 @@
+(library
+ (name piecesinternals)
+ (libraries chessinternals))
