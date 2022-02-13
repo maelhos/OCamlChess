@@ -35,7 +35,7 @@ let rookAttackMap (b: Board.t) (fs: int) (a: int array) : unit =
     long slideRight.(fs) cps; long slideLeft.(fs) cps; long slideUp.(fs) cps; long slideDown.(fs) cps
   end;;
 
-let rookLegalMoves (b: Board.t) (fs: int) : Move.t list = 
+let rookLegalMoves (b: Board.t) (fs: int) (lst: Move.t list): Move.t list = 
   let rec long (map: int list) (co: Color.t) (acc: Move.t list): Move.t list = 
     match map with
     | [] -> acc
@@ -47,5 +47,5 @@ let rookLegalMoves (b: Board.t) (fs: int) : Move.t list =
     end
   in begin
     let cps = Piece.getColor (b.repr.(fs)) in 
-    long slideRight.(fs) cps (long slideLeft.(fs) cps (long slideUp.(fs) cps (long slideDown.(fs) cps [])))
+    long slideRight.(fs) cps (long slideLeft.(fs) cps (long slideUp.(fs) cps (long slideDown.(fs) cps lst)))
   end;;

@@ -82,7 +82,9 @@ let str_of_Move (m: Move.t) (b: t) : string =
   | CastleQS(_) -> "O-O-O"
   | Move(aa, bb) -> string_of_char (Piece.char_of_piece (b.repr.(aa))) 
   ^ string_of_char (char_of_int ((bb mod 8) + 0x61))
-  ^ string_of_int ((bb / 8) + 1);;
+  ^ string_of_int ((bb / 8) + 1)
+  | Promote(a, b) -> string_of_char (char_of_int ((a mod 8) + 0x61))
+  ^ string_of_int ((a / 8) + 1) ^ string_of_char (Piece.char_of_piece b);;
 
 let print_move_list (bo: t) (l: Move.t list) : unit =
   let rec aux (l: Move.t list) : unit =
@@ -94,6 +96,7 @@ let print_move_list (bo: t) (l: Move.t list) : unit =
     Printf.printf "%c%c%c -> %c%c; " (Piece.char_of_piece bo.repr.(a)) x y x1 y1  ; aux (h2::t) end
     | Move.CastleKS(a) -> (if Piece.getColor bo.repr.(a) = Color.Black then print_string "o-o; " else print_string "O-O; " ; aux (h2::t))
     | Move.CastleQS(a) -> (if Piece.getColor bo.repr.(a) = Color.Black then print_string "o-o-o; " else print_string "O-O-O; " ; aux (h2::t))
+    | Promote(a, b) -> let x, y = Move.cc_of_pos a in Printf.printf "%c%c = %c; " x y (Piece.char_of_piece b)   ; aux (h2::t)
   end
   | h1::[] -> begin match h1 with
     | Move.Move(a, b) -> begin let x, y = Move.cc_of_pos a in 
@@ -101,6 +104,7 @@ let print_move_list (bo: t) (l: Move.t list) : unit =
     Printf.printf "%c%c%c -> %c%c]\n" (Piece.char_of_piece bo.repr.(a)) x y x1 y1 end
     | CastleKS(a) -> if Piece.getColor bo.repr.(a) = Color.Black then print_string "o-o]\n" else print_string "O-O]\n"
     | CastleQS(a) -> if Piece.getColor bo.repr.(a) = Color.Black then print_string "o-o-o]\n" else print_string "O-O-O]\n"
+    | Promote(a, b) -> let x, y = Move.cc_of_pos a in Printf.printf "%c%c = %c]\n" x y (Piece.char_of_piece b)
   end
   in print_char '['; aux l;;
 

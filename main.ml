@@ -40,4 +40,4 @@ let attackmap = Array.make 64 0;;
 Queen.queenAttackMap testb a attackmap ;;
 print_int_array attackmap;;
 
-Board.print_move_list testb (Queen.queenLegalMoves testb a);;
+Board.print_move_list testb (Queen.queenLegalMoves testb a []);;

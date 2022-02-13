@@ -33,10 +33,10 @@ let knightAttackMap (b: Board.t) (fs: int) (a: int array) : unit =
     long knightMap.(fs) cps
   end;;
 
-let knightLegalMoves (b: Board.t) (fs: int) : Move.t list = 
+let knightLegalMoves (b: Board.t) (fs: int) (lst: Move.t list) : Move.t list = 
   let rec long (map: int list) (co: Color.t) : Move.t list = 
     match map with
-    | [] -> []
+    | [] -> lst
     | h::t -> begin
       match b.repr.(h) with
       | EmptySquare -> Move(fs, h)::(long t co)

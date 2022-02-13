@@ -1,7 +1,8 @@
 type t = 
   | Move of int*int
   | CastleQS of int (* int is pos of the king *)
-  | CastleKS of int;;
+  | CastleKS of int
+  | Promote of int*Piece.t;; (* pawn target square*promottion piece*)
 
 let pos_of_cord (f: int) (r: int) : int = f + 8*r;;
 let cord_of_pos (p: int) : (int*int) = (p mod 8, p / 8);;

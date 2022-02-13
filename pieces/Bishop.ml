@@ -35,7 +35,7 @@ let bishopAttackMap (b: Board.t) (fs: int) (a: int array) : unit =
     long slideTopRight.(fs) cps; long slideTopLeft.(fs) cps; long slideBottomRight.(fs) cps; long slideBottomLeft.(fs) cps
   end;;
 
-let bishopLegalMoves (b: Board.t) (fs: int) : Move.t list = 
+let bishopLegalMoves (b: Board.t) (fs: int) (lst: Move.t list) : Move.t list = 
   let rec long (map: int list) (co: Color.t) (acc: Move.t list) : Move.t list = 
     match map with
     | [] -> acc
@@ -47,5 +47,5 @@ let bishopLegalMoves (b: Board.t) (fs: int) : Move.t list =
     end
   in begin
     let cps = Piece.getColor (b.repr.(fs)) in 
-  long slideTopRight.(fs) cps (long slideTopLeft.(fs) cps (long slideBottomRight.(fs) cps (long slideBottomLeft.(fs) cps [])))
+  long slideTopRight.(fs) cps (long slideTopLeft.(fs) cps (long slideBottomRight.(fs) cps (long slideBottomLeft.(fs) cps lst)))
   end;;
