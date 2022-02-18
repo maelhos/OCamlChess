@@ -12,7 +12,10 @@ type t = {
   mutable draw50HalfMoves : int;
 
   mutable numberOfMoves : int;
-  repr : Piece.t array
+  repr : Piece.t array;
+
+  whiteAttackMap : int array;
+  blackAttackMap : int array
 };;
 
 let eval (b: t) : int =
@@ -41,7 +44,6 @@ let print_Board (b: t) : unit =
       aux (r-1);
       end
   in aux 63; print_newline ();; 
-
 
 let setFENstring (b: t) (s: string) : unit =
   let rec setPieces (b: t) (s: string) (index: int) (file: int) (rank: int) : int = 
@@ -108,3 +110,25 @@ let print_move_list (bo: t) (l: Move.t list) : unit =
   end
   in print_char '['; aux l;;
 
+  let debug_move_list (bo: t) (l: Move.t list) : unit =
+    let rec aux (l: Move.t list) : unit =
+    match l with
+    | [] -> print_string "\n"
+    | h1::h2::t -> begin match h1 with
+      | Move.Move(a, b) -> begin let x, y = Move.cc_of_pos a in 
+      let x1, y1 = Move.cc_of_pos b in 
+      Printf.printf "%c%c%c%c\n" x y x1 y1  ; aux (h2::t) end
+      | Move.CastleKS(a) -> (if Piece.getColor bo.repr.(a) = Color.Black then print_string "o-o\n" else print_string "O-O\n" ; aux (h2::t))
+      | Move.CastleQS(a) -> (if Piece.getColor bo.repr.(a) = Color.Black then print_string "o-o-o\n" else print_string "O-O-O\n" ; aux (h2::t))
+      | Promote(a, b) -> let x, y = Move.cc_of_pos a in Printf.printf "%c%c = %c; " x y (Piece.char_of_piece b)   ; aux (h2::t)
+    end
+    | h1::[] -> begin match h1 with
+      | Move.Move(a, b) -> begin let x, y = Move.cc_of_pos a in 
+      let x1, y1 = Move.cc_of_pos b in 
+      Printf.printf "%c%c%c%c\n"  x y x1 y1 end
+      | CastleKS(a) -> if Piece.getColor bo.repr.(a) = Color.Black then print_string "o-o\n" else print_string "O-O\n"
+      | CastleQS(a) -> if Piece.getColor bo.repr.(a) = Color.Black then print_string "o-o-o\n" else print_string "O-O-O\n"
+      | Promote(a, b) -> let x, y = Move.cc_of_pos a in Printf.printf "%c%c = %c]\n" x y (Piece.char_of_piece b)
+    end
+    in aux l;;
+  

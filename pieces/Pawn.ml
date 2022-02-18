@@ -1,5 +1,23 @@
 open Chessinternals
 
+let pawnAttackMap (b: Board.t) (fs: int) (a: int array) : unit = 
+  let attack (off: int) (co: Color.t) : unit = 
+    if (b.repr.(off+fs) = EmptySquare || Piece.getColor (b.repr.(off+fs)) != co) then
+    a.(fs+off) <- a.(fs+off)+ 1 else ()
+  in begin
+    let cps = Piece.getColor (b.repr.(fs)) in 
+    if cps = Color.White then begin
+      match Move.col_of_pos fs with
+      | 0 -> attack 9 cps
+      | 7 -> attack 7 cps
+      | _ -> (attack 7 cps; attack 9 cps)
+    end else begin
+      match Move.col_of_pos fs with
+      | 0 -> attack (-7) cps
+      | 7 -> attack (-9) cps
+      | _ -> (attack (-7) cps; attack (-9) cps)
+    end
+  end;;
 
 let pawnLegalMoves (b: Board.t) (fs: int) (lst: Move.t list) : Move.t list = 
   let pawnSimpleMove (acc: Move.t list)  (tgt: int): Move.t list = 
@@ -25,9 +43,9 @@ let pawnLegalMoves (b: Board.t) (fs: int) (lst: Move.t list) : Move.t list =
       Promote(fs+tgt,Piece.Queen(co))::Promote(fs+tgt,Piece.Bishop(co))::Promote(fs+tgt,Piece.Rook(co))::acc else acc
   in begin
     let cps = Piece.getColor (b.repr.(fs)) in 
-  if cps = Color.White then begin
-    if a then 
-
+  if cps = Color.White then begin (* en passant ... *)
+    if 0=1 then 
+      []
     else begin
       if Move.line_of_pos fs = 1 then 
         pawnOn2ndRank lst 8

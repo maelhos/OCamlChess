@@ -1,5 +1,4 @@
 open Chessinternals
-open Piecesinternals
 
 let testb = {
   Board.turnToPlay = White;
@@ -10,7 +9,11 @@ let testb = {
   Board.draw50HalfMoves = 0;
   Board.enPassantPawn = -1;
   Board.numberOfMoves = 1;
-  Board.repr = Array.make 64 Piece.EmptySquare
+  Board.repr = Array.make 64 Piece.EmptySquare;
+
+  Board.whiteAttackMap = Array.make 64 0;
+  Board.blackAttackMap = Array.make 64 0
+
 };;
 
 (* Board.setFENstring testb "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";; *)
@@ -35,9 +38,10 @@ let print_int_array (l: int array) : unit =
   | _ -> Printf.printf "%d; " l.(i); aux l (i+1)
   in print_char '['; aux l 0;;
 
-let a = 21;;
-let attackmap = Array.make 64 0;;
-Queen.queenAttackMap testb a attackmap ;;
-print_int_array attackmap;;
+let mv = Search.legalMoves testb;;
 
-Board.print_move_list testb (Queen.queenLegalMoves testb a []);;
+Board.debug_move_list testb mv;;
+Board.print_move_list testb mv;;
+
+print_int (List.length mv);;
+print_newline ();;
